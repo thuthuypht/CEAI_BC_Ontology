@@ -1,0 +1,27 @@
+name: bc-ontology-ml
+channels:
+  - conda-forge
+  - pytorch
+dependencies:
+  - python=3.10
+  - pip
+  - numpy
+  - pandas
+  - scipy
+  - scikit-learn
+  - matplotlib
+  - networkx
+  - rdflib
+  - pytorch
+  - pip:
+      - pykeen>=1.10.2
+      - umap-learn
+      - hdbscan
+      - python-igraph
+      - leidenalg
+      - xgboost
+      - lightgbm
+      - tqdm
+      - pyyaml
+      - openpyxl
+      - shap

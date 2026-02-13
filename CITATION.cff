@@ -1,0 +1,8 @@
+cff-version: 1.2.0
+title: Ontology-Enhanced Breast Cancer Diagnosis (PyKEEN + Clustering + Meta-Learning)
+message: If you use this software, please cite the associated manuscript and this repository.
+type: software
+license: MIT
+authors:
+  - family-names: Pham
+    given-names: Thi Thu Thuy
