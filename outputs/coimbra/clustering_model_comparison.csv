@@ -1,0 +1,4 @@
+model,embedding_dim,epochs,patients,leiden_clusters,leiden_modularity,hdbscan_clusters,hdbscan_noise_ratio,hdbscan_silhouette,train_time_sec,literal_strategy_used
+TransE,64,50,116,5,0.239150414901439,0,1.0,-1.0,13.67153286933899,categorize
+RotatE,64,50,116,6,0.14598708562717352,0,1.0,-1.0,18.857203006744385,categorize
+ComplEx,64,50,116,6,0.17759840953314146,0,1.0,-1.0,21.609352111816406,categorize

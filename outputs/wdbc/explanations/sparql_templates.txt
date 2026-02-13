@@ -1,0 +1,23 @@
+### Query 1: top categorical features (Low/Med/High)
+PREFIX bc: <http://example.org/breastcancer#>
+SELECT ?feature ?category (COUNT(?patient) AS ?n)
+WHERE {
+  ?patient a bc:Patient .
+  ?patient ?feature ?category .
+  FILTER(isIRI(?category))
+  FILTER(REGEX(STR(?category), "Low|Med|Medium|High", "i"))
+}
+GROUP BY ?feature ?category
+ORDER BY DESC(?n)
+LIMIT 30
+
+### Query 2: example patients with 'High' categories
+PREFIX bc: <http://example.org/breastcancer#>
+SELECT ?patient ?feature ?category
+WHERE {
+  ?patient a bc:Patient .
+  ?patient ?feature ?category .
+  FILTER(isIRI(?category))
+  FILTER(REGEX(STR(?category), "High", "i"))
+}
+LIMIT 50

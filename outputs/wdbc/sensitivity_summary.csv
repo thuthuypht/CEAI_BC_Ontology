@@ -1,0 +1,4 @@
+model,embedding_dim_effective,leiden_modularity,hdbscan_silhouette_umap,hdbscan_noise_frac,hdbscan_n_clusters
+TransE,100,0.4822251203189516,0.6800946593284607,0.6625659050966608,2
+RotatE,200,0.6375648650226503,0.7282071709632874,0.7961335676625659,2
+ComplEx,200,0.1970136798157984,-1.0,1.0,0

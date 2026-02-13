@@ -1,0 +1,8 @@
+model: TransE
+leiden_modularity: 0.482225
+hdbscan_silhouette_umap: 0.680095
+hdbscan_noise_frac: 0.662566
+leiden_n_clusters: 5
+hdbscan_n_clusters: 2
+pykeen_test_mrr_best_effort: None
+pykeen_test_hits10_best_effort: None
