@@ -59,3 +59,5 @@ After running clustering, generate templates + top-category patterns:
 ```bash
 python scripts/05_sparql_cluster_explain.py --input_ttl <ttl> --clusters_csv <outputs>/UMAP_Clusters.csv --out_dir <outputs>
 ```
+If you see PyKEEN/typing errors, you are likely on Python 3.12; use bc-ontology-ml (Python 3.10).
+

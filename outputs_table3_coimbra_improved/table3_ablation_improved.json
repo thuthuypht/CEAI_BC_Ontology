@@ -1,0 +1,396 @@
+{
+  "dataset_name": "Coimbra",
+  "kg_path": "D:\\CEAI_BC_Ontology\\data\\processed\\Breast_Cancer_Coimbra.owl",
+  "kg_format": "xml",
+  "model_path": "D:\\CEAI_BC_Ontology\\outputs\\coimbra\\model_TransE",
+  "seeds": [
+    42,
+    43,
+    44,
+    45,
+    46
+  ],
+  "test_size": 0.2,
+  "cv_folds": 5,
+  "pca_candidates": [
+    8,
+    16,
+    32
+  ],
+  "hdbscan_min_cluster_size": 15,
+  "hdbscan_min_samples": null,
+  "positive_label": "2.0",
+  "label_predicate_iri": "http://example.org/coimbra#Classification",
+  "settings": [
+    {
+      "Setting": "Baseline A (Tabular only)",
+      "per_seed_details": [
+        {
+          "seed": 42,
+          "features": {
+            "n_train": 92,
+            "n_test": 24,
+            "n_features": 10
+          },
+          "meta": {
+            "meta_C": 0.1,
+            "meta_cv_auc": 1.0,
+            "base_models": [
+              "LR",
+              "kNN",
+              "SVM",
+              "RF",
+              "MLP",
+              "XGB",
+              "LGBM"
+            ]
+          }
+        },
+        {
+          "seed": 43,
+          "features": {
+            "n_train": 92,
+            "n_test": 24,
+            "n_features": 10
+          },
+          "meta": {
+            "meta_C": 0.1,
+            "meta_cv_auc": 1.0,
+            "base_models": [
+              "LR",
+              "kNN",
+              "SVM",
+              "RF",
+              "MLP",
+              "XGB",
+              "LGBM"
+            ]
+          }
+        },
+        {
+          "seed": 44,
+          "features": {
+            "n_train": 92,
+            "n_test": 24,
+            "n_features": 10
+          },
+          "meta": {
+            "meta_C": 0.1,
+            "meta_cv_auc": 1.0,
+            "base_models": [
+              "LR",
+              "kNN",
+              "SVM",
+              "RF",
+              "MLP",
+              "XGB",
+              "LGBM"
+            ]
+          }
+        },
+        {
+          "seed": 45,
+          "features": {
+            "n_train": 92,
+            "n_test": 24,
+            "n_features": 10
+          },
+          "meta": {
+            "meta_C": 0.1,
+            "meta_cv_auc": 1.0,
+            "base_models": [
+              "LR",
+              "kNN",
+              "SVM",
+              "RF",
+              "MLP",
+              "XGB",
+              "LGBM"
+            ]
+          }
+        },
+        {
+          "seed": 46,
+          "features": {
+            "n_train": 92,
+            "n_test": 24,
+            "n_features": 10
+          },
+          "meta": {
+            "meta_C": 0.1,
+            "meta_cv_auc": 1.0,
+            "base_models": [
+              "LR",
+              "kNN",
+              "SVM",
+              "RF",
+              "MLP",
+              "XGB",
+              "LGBM"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Setting": "Baseline B (+Embeddings PCA)",
+      "per_seed_details": [
+        {
+          "seed": 42,
+          "features": {
+            "pca_components": 8,
+            "pca_explained_var_sum": 0.3220777796145606,
+            "n_train": 92,
+            "n_test": 24,
+            "n_features": 18
+          },
+          "meta": {
+            "meta_C": 0.1,
+            "meta_cv_auc": 1.0,
+            "base_models": [
+              "LR",
+              "kNN",
+              "SVM",
+              "RF",
+              "MLP",
+              "XGB",
+              "LGBM"
+            ]
+          }
+        },
+        {
+          "seed": 43,
+          "features": {
+            "pca_components": 8,
+            "pca_explained_var_sum": 0.3253936961831366,
+            "n_train": 92,
+            "n_test": 24,
+            "n_features": 18
+          },
+          "meta": {
+            "meta_C": 0.1,
+            "meta_cv_auc": 1.0,
+            "base_models": [
+              "LR",
+              "kNN",
+              "SVM",
+              "RF",
+              "MLP",
+              "XGB",
+              "LGBM"
+            ]
+          }
+        },
+        {
+          "seed": 44,
+          "features": {
+            "pca_components": 8,
+            "pca_explained_var_sum": 0.32648711150360665,
+            "n_train": 92,
+            "n_test": 24,
+            "n_features": 18
+          },
+          "meta": {
+            "meta_C": 0.1,
+            "meta_cv_auc": 1.0,
+            "base_models": [
+              "LR",
+              "kNN",
+              "SVM",
+              "RF",
+              "MLP",
+              "XGB",
+              "LGBM"
+            ]
+          }
+        },
+        {
+          "seed": 45,
+          "features": {
+            "pca_components": 8,
+            "pca_explained_var_sum": 0.32657945285005985,
+            "n_train": 92,
+            "n_test": 24,
+            "n_features": 18
+          },
+          "meta": {
+            "meta_C": 0.1,
+            "meta_cv_auc": 1.0,
+            "base_models": [
+              "LR",
+              "kNN",
+              "SVM",
+              "RF",
+              "MLP",
+              "XGB",
+              "LGBM"
+            ]
+          }
+        },
+        {
+          "seed": 46,
+          "features": {
+            "pca_components": 8,
+            "pca_explained_var_sum": 0.3244437110107565,
+            "n_train": 92,
+            "n_test": 24,
+            "n_features": 18
+          },
+          "meta": {
+            "meta_C": 0.1,
+            "meta_cv_auc": 1.0,
+            "base_models": [
+              "LR",
+              "kNN",
+              "SVM",
+              "RF",
+              "MLP",
+              "XGB",
+              "LGBM"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Setting": "Baseline C (+Clusters soft +dist)",
+      "per_seed_details": [
+        {
+          "seed": 42,
+          "features": {
+            "pca_components": 8,
+            "pca_explained_var_sum": 0.3220777796145606,
+            "hdb_min_cluster_size": 15,
+            "hdb_min_samples": null,
+            "hdb_n_clusters_train": 0,
+            "hdb_noise_frac_train": 1.0,
+            "n_train": 92,
+            "n_test": 24,
+            "n_features": 32
+          },
+          "meta": {
+            "meta_C": 0.1,
+            "meta_cv_auc": 1.0,
+            "base_models": [
+              "LR",
+              "kNN",
+              "SVM",
+              "RF",
+              "MLP",
+              "XGB",
+              "LGBM"
+            ]
+          }
+        },
+        {
+          "seed": 43,
+          "features": {
+            "pca_components": 8,
+            "pca_explained_var_sum": 0.3253936961831366,
+            "hdb_min_cluster_size": 15,
+            "hdb_min_samples": null,
+            "hdb_n_clusters_train": 0,
+            "hdb_noise_frac_train": 1.0,
+            "n_train": 92,
+            "n_test": 24,
+            "n_features": 32
+          },
+          "meta": {
+            "meta_C": 0.1,
+            "meta_cv_auc": 1.0,
+            "base_models": [
+              "LR",
+              "kNN",
+              "SVM",
+              "RF",
+              "MLP",
+              "XGB",
+              "LGBM"
+            ]
+          }
+        },
+        {
+          "seed": 44,
+          "features": {
+            "pca_components": 8,
+            "pca_explained_var_sum": 0.32648711150360665,
+            "hdb_min_cluster_size": 15,
+            "hdb_min_samples": null,
+            "hdb_n_clusters_train": 0,
+            "hdb_noise_frac_train": 1.0,
+            "n_train": 92,
+            "n_test": 24,
+            "n_features": 32
+          },
+          "meta": {
+            "meta_C": 0.1,
+            "meta_cv_auc": 1.0,
+            "base_models": [
+              "LR",
+              "kNN",
+              "SVM",
+              "RF",
+              "MLP",
+              "XGB",
+              "LGBM"
+            ]
+          }
+        },
+        {
+          "seed": 45,
+          "features": {
+            "pca_components": 8,
+            "pca_explained_var_sum": 0.32657945285005985,
+            "hdb_min_cluster_size": 15,
+            "hdb_min_samples": null,
+            "hdb_n_clusters_train": 0,
+            "hdb_noise_frac_train": 1.0,
+            "n_train": 92,
+            "n_test": 24,
+            "n_features": 32
+          },
+          "meta": {
+            "meta_C": 0.1,
+            "meta_cv_auc": 1.0,
+            "base_models": [
+              "LR",
+              "kNN",
+              "SVM",
+              "RF",
+              "MLP",
+              "XGB",
+              "LGBM"
+            ]
+          }
+        },
+        {
+          "seed": 46,
+          "features": {
+            "pca_components": 8,
+            "pca_explained_var_sum": 0.3244437110107565,
+            "hdb_min_cluster_size": 15,
+            "hdb_min_samples": null,
+            "hdb_n_clusters_train": 0,
+            "hdb_noise_frac_train": 1.0,
+            "n_train": 92,
+            "n_test": 24,
+            "n_features": 32
+          },
+          "meta": {
+            "meta_C": 0.1,
+            "meta_cv_auc": 1.0,
+            "base_models": [
+              "LR",
+              "kNN",
+              "SVM",
+              "RF",
+              "MLP",
+              "XGB",
+              "LGBM"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+Dataset,ArtifactsModel,Setting,use_embeddings,use_clusters,use_sparql,n_seeds,n_features_mean,Accuracy_mean,Accuracy_std,Precision_mean,Precision_std,Recall_mean,Recall_std,F1-score_mean,F1-score_std,ROC-AUC_mean,ROC-AUC_std
+Coimbra,TransE,Baseline A (Tabular only),False,False,False,5,10.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+Coimbra,TransE,Baseline B (+Embeddings PCA),True,False,False,5,18.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+Coimbra,TransE,Baseline C (+Clusters soft +dist),True,True,False,5,32.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0

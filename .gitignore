@@ -13,12 +13,6 @@ build/
 .DS_Store
 Thumbs.db
 
-# Outputs / data
-outputs/
-data/raw/
-data/interim/
-data/processed/
-*.log
 
 # Env
 .env
