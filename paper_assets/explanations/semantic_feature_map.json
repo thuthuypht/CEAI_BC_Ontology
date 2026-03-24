@@ -1,0 +1,46 @@
+[
+  {
+    "feature_id": "HighRiskMorphology",
+    "feature_iri": "http://example.org/breastcancer#HighRiskMorphology",
+    "output_triple": "http://example.org/breastcancer#hasSemanticFeature http://example.org/breastcancer#HighRiskMorphology",
+    "output_column": "feat_HighRiskMorphology",
+    "dataset_scope": "WDBC",
+    "feature_type": "binary",
+    "thresholds": "AREA_THRESHOLD;CONCAVITY_THRESHOLD",
+    "threshold_definition": "Fixed constants (Appendix Table A1) OR training-only percentiles",
+    "description": "Flags patients with simultaneously high area_mean and concavity_mean (WDBC KG)."
+  },
+  {
+    "feature_id": "ElevatedInflammation",
+    "feature_iri": "http://example.org/coimbra#ElevatedInflammation",
+    "output_triple": "http://example.org/coimbra#hasSemanticFeature http://example.org/coimbra#ElevatedInflammation",
+    "output_column": "feat_ElevatedInflammation",
+    "dataset_scope": "Coimbra",
+    "feature_type": "binary",
+    "thresholds": "RESISTIN_THRESHOLD",
+    "threshold_definition": "Fixed constant (Appendix Table A1) OR training-only percentile",
+    "description": "Flags patients with elevated resistin (Coimbra KG)."
+  },
+  {
+    "feature_id": "ClusterOutlier",
+    "feature_iri": "N/A",
+    "output_triple": "N/A",
+    "output_column": "hdbscan_outlier_score",
+    "dataset_scope": "All",
+    "feature_type": "continuous",
+    "thresholds": "",
+    "threshold_definition": "Computed from HDBSCAN membership strength",
+    "description": "Outlier proxy = 1 - membership_strength; used as weak structural feature."
+  },
+  {
+    "feature_id": "LeidenCluster",
+    "feature_iri": "N/A",
+    "output_triple": "http://example.org/breastcancer#leidenCluster literal (or stored externally in results tables)",
+    "output_column": "leiden_cluster",
+    "dataset_scope": "All",
+    "feature_type": "categorical",
+    "thresholds": "",
+    "threshold_definition": "Community detection on patient embedding space",
+    "description": "Leiden community label for semantic subtyping."
+  }
+]

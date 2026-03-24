@@ -1,0 +1,87 @@
+SPARQL Templates for Ontology-Enhanced Breast Cancer Prediction
+==============================================================
+Namespaces detected:
+  WDBC  namespace: http://example.org/breastcancer#
+  Coimbra namespace: http://example.org/coimbra#
+
+How to use:
+  - Load prefixes from prefixes.sparql.
+  - For WDBC queries, use prefix wdbc: (or bc: which aliases wdbc: by default).
+  - For Coimbra queries, use prefix coim: (or use prefixes_coimbra.sparql where bc: aliases coim:).
+
+----------------------------------------------------------------
+A) Cluster explanation: top category patterns per Leiden cluster
+----------------------------------------------------------------
+Goal: For each Leiden cluster, count how often each ontology-linked category
+(e.g., Low/Medium/High) occurs for each predicate.
+
+Expected inputs:
+  - A triple linking patients to cluster IDs, e.g., wdbc:leidenCluster "0"^^xsd:int
+  - Triples linking patients to category nodes (IRIs), e.g., wdbc:hasAreaWorstCategory wdbc:High
+
+Template:
+  SELECT ?cluster ?predicate ?category (COUNT(?p) AS ?count)
+  WHERE {
+    ?p wdbc:leidenCluster ?cluster .
+    ?p ?predicate ?category .
+    FILTER(isIRI(?category)) .
+  }
+  GROUP BY ?cluster ?predicate ?category
+  ORDER BY ?cluster DESC(?count)
+
+----------------------------------------------------------------
+B) Retrieve representative patients from a cluster
+----------------------------------------------------------------
+SELECT ?p
+WHERE {
+  ?p wdbc:leidenCluster ?cluster .
+  FILTER(?cluster = 0)   # change cluster id
+}
+LIMIT 30
+
+----------------------------------------------------------------
+C) Construct rule-derived semantic features (binary flags)
+----------------------------------------------------------------
+Important leakage note:
+If thresholds are data-driven (e.g., percentiles), compute them on TRAIN only
+and then use the fixed numeric values here for validation/test.
+
+Example 1: HighRiskMorphology (WDBC-style; numeric literals)
+CONSTRUCT {
+  ?p wdbc:hasSemanticFeature wdbc:HighRiskMorphology .
+}
+WHERE {
+  ?p wdbc:area_mean ?a .
+  ?p wdbc:concavity_mean ?c .
+  FILTER(xsd:double(?a) > AREA_THRESHOLD && xsd:double(?c) > CONCAVITY_THRESHOLD) .
+}
+
+Example 2: ElevatedInflammation (Coimbra-style; numeric literals)
+CONSTRUCT {
+  ?p coim:hasSemanticFeature coim:ElevatedInflammation .
+}
+WHERE {
+  ?p coim:resistin ?r .
+  FILTER(xsd:double(?r) > RESISTIN_THRESHOLD) .
+}
+
+----------------------------------------------------------------
+D) Export rule outputs as a feature table (one column per rule)
+----------------------------------------------------------------
+SELECT ?p
+       (IF(EXISTS { ?p wdbc:hasSemanticFeature wdbc:HighRiskMorphology }, 1, 0) AS ?feat_HighRiskMorphology)
+       (IF(EXISTS { ?p coim:hasSemanticFeature coim:ElevatedInflammation }, 1, 0) AS ?feat_ElevatedInflammation)
+WHERE {
+  ?p ?anyPred ?anyObj .
+  FILTER(CONTAINS(STR(?p), "Patient_"))  # adapt if your patient IDs use another pattern
+}
+
+----------------------------------------------------------------
+E) Debug helper: inspect available predicates for patients
+----------------------------------------------------------------
+SELECT DISTINCT ?pred
+WHERE {
+  ?p ?pred ?o .
+  FILTER(CONTAINS(STR(?p), "Patient_"))
+}
+ORDER BY ?pred

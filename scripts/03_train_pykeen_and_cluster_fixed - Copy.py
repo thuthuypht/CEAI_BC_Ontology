@@ -161,97 +161,49 @@ class PykeenTrainConfig:
 def train_pykeen_embeddings(triples: np.ndarray, cfg: PykeenTrainConfig):
     """
     Train a PyKEEN model and return (result, base_factory, entity_embeddings, entity_id_to_label).
-
-    This function is robust to small graphs where coverage-based splitting can fail.
-    It tries (in order):
-      1) base_factory.split(...) default method
-      2) base_factory.split(..., method="random") or splitter="random" if supported
-      3) no split: use the full factory for training/testing/validation (embeddings only)
-
-    It also adapts to PyKEEN pipeline API differences by checking parameter names.
     """
     _require("pykeen")
     from pykeen.pipeline import pipeline
     from pykeen.triples import TriplesFactory
-    import inspect
 
+    # Build a factory from labeled triples
     base_factory = TriplesFactory.from_labeled_triples(triples)
 
-    def safe_split(factory: TriplesFactory):
-        # Attempt default split
-        try:
-            return factory.split(ratios=(0.8, 0.1, 0.1), random_state=cfg.random_seed)
-        except Exception:
-            pass
+    # Split to satisfy pipeline's dataset checks (some versions require testing as well)
+    training, testing, validation = base_factory.split(
+        ratios=(0.8, 0.1, 0.1),
+        random_state=cfg.random_seed,
+    )
 
-        # Attempt random split if supported
-        try:
-            split_sig = inspect.signature(factory.split)
-            kwargs = {"ratios": (0.8, 0.1, 0.1), "random_state": cfg.random_seed}
-            if "method" in split_sig.parameters:
-                kwargs["method"] = "random"
-            elif "splitter" in split_sig.parameters:
-                kwargs["splitter"] = "random"
-            else:
-                # No way to request random split in this version
-                raise RuntimeError("split() has no method/splitter parameter")
-            return factory.split(**kwargs)
-        except Exception:
-            pass
-
-        # Fallback: no split (embeddings only)
-        return factory, factory, factory
-
-    training, testing, validation = safe_split(base_factory)
-
-    # Build kwargs for pipeline across versions
-    pipe_sig = inspect.signature(pipeline)
-    kwargs = {
-        "model": cfg.model,
-        "model_kwargs": dict(embedding_dim=cfg.embedding_dim),
-        "training_kwargs": dict(num_epochs=cfg.epochs, batch_size=cfg.batch_size),
-        "optimizer_kwargs": dict(lr=cfg.lr),
-        "random_seed": cfg.random_seed,
-        "device": "cpu",
-    }
-
-    if "training" in pipe_sig.parameters:
-        kwargs["training"] = training
-        # Some versions require testing when using factories
-        if "testing" in pipe_sig.parameters:
-            kwargs["testing"] = testing
-        if "validation" in pipe_sig.parameters:
-            kwargs["validation"] = validation
-    else:
-        # Older/alternate API
-        if "training_triples_factory" in pipe_sig.parameters:
-            kwargs["training_triples_factory"] = training
-        if "testing_triples_factory" in pipe_sig.parameters:
-            kwargs["testing_triples_factory"] = testing
-        if "validation_triples_factory" in pipe_sig.parameters:
-            kwargs["validation_triples_factory"] = validation
-
-    result = pipeline(**kwargs)
+    result = pipeline(
+        training=training,
+        testing=testing,
+        validation=validation,
+        model=cfg.model,
+        model_kwargs=dict(embedding_dim=cfg.embedding_dim),
+        training_kwargs=dict(num_epochs=cfg.epochs, batch_size=cfg.batch_size),
+        optimizer_kwargs=dict(lr=cfg.lr),
+        random_seed=cfg.random_seed,
+        device="cpu",  # keep CPU for portability
+    )
 
     model = result.model
 
     # Extract entity embeddings robustly across PyKEEN versions
     rep = model.entity_representations[0]
     emb = None
-
+    # Common cases
     if hasattr(rep, "weight"):
         try:
             emb = rep.weight.detach().cpu().numpy()
         except Exception:
             emb = None
-
     if emb is None and hasattr(rep, "_embeddings") and hasattr(rep._embeddings, "weight"):
         emb = rep._embeddings.weight.detach().cpu().numpy()
-
     if emb is None and hasattr(rep, "get_in_canonical_shape"):
         emb = rep.get_in_canonical_shape().detach().cpu().numpy()
-
     if emb is None:
+        # Last resort: call representation (may work in some versions)
         emb = rep().detach().cpu().numpy()
 
     entity_id_to_label = base_factory.entity_id_to_label
@@ -490,23 +442,6 @@ def main():
     X = entity_emb[np.array(patient_ids)]
     print(f" Samples used for clustering: {X.shape[0]} (patients)")
 
-    # Export patient embeddings (required by ablation scripts)
-    emb_out_csv = out_dir / "tables" / "patient_embeddings.csv"
-    emb_out_xlsx = out_dir / "tables" / "patient_embeddings.xlsx"
-    try:
-        df_emb = pd.DataFrame(X, columns=[f"dim_{i}" for i in range(X.shape[1])])
-        df_emb.insert(0, "patient_uri", patient_labels)
-        df_emb.to_csv(emb_out_csv, index=False)
-        try:
-            df_emb.to_excel(emb_out_xlsx, index=False)
-            print(f" Saved embeddings:\n - {emb_out_csv}\n - {emb_out_xlsx}")
-        except Exception as e:
-            print(f" Could not write Excel embeddings (missing openpyxl?). Saved CSV only. Details: {e}")
-            print(f" Saved embeddings:\n - {emb_out_csv}")
-    except Exception as e:
-        print(f" Failed to export patient embeddings: {e}")
-
-
     Xs = standardize(X)
     umap_xy = project_umap(Xs, n_neighbors=args.umap_n_neighbors, min_dist=args.umap_min_dist, random_state=args.seed)
 
@@ -533,7 +468,7 @@ def main():
 
     # Export table
     df = pd.DataFrame({
-        "patient_uri": patient_labels,
+        "entity_label": patient_labels,
         "umap_1": umap_xy[:, 0],
         "umap_2": umap_xy[:, 1],
         "leiden_cluster": leiden_labels,
@@ -563,7 +498,7 @@ def main():
     expl_rows = []
     # Build patient URI list (use original labels)
     for cid in sorted(np.unique(leiden_labels)):
-        members = df.loc[df["leiden_cluster"] == cid, "patient_uri"].tolist()
+        members = df.loc[df["leiden_cluster"] == cid, "entity_label"].tolist()
         top_df = summarize_cluster_edges(g, members, top_k=15)
         top_df.insert(0, "leiden_cluster", cid)
         expl_rows.append(top_df)

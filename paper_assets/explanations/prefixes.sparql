@@ -1,0 +1,12 @@
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+
+# Dataset namespaces detected from our TTL files
+PREFIX wdbc: <http://example.org/breastcancer#>
+PREFIX coim: <http://example.org/coimbra#>
+
+# Backward-compatible generic prefix used in templates below.
+# Use wdbc: for WDBC KG and coim: for Coimbra KG when running queries.
+PREFIX bc:   <http://example.org/breastcancer#>
